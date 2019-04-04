@@ -1,5 +1,4 @@
 ---
----
 
 # Start the Virtual Machine fhooelibrenms on Ansible 2.5
 #- name: Start the Virtual Machine fhooelibrenms
