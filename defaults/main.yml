@@ -3,3 +3,13 @@
 # inventory_hostname: localhost
 
 ansible_python_interpreter: /usr/bin/python3
+vcenter_hostname: vcenter.example.at
+vcenter_user: "admin"
+vcenter_pass: "admin"
+vm_network: VMNetwork
+vm_cluster: "vcentercluster1"
+vm_dc: "vcenterdc"
+vm_folder: "vcenter/testing"
+vm_template: "template-vm10-ws2016-std-en"
+vm_create: true
+

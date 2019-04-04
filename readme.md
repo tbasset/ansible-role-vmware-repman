@@ -1,6 +1,5 @@
-# Ansible Role Cisco Hostname
-
-This is a Ansible Role for setting Hostnames on Cisco Devices.
+# Ansible Role VMware vSphere Operations
+This is a Ansible Role for Operating a VM of a Service.
 
 Aufbau:
 - Build

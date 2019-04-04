@@ -1,59 +1,153 @@
 ---
-- name: Create Build Directory
-  connection: local
-  tags: build
-  file: path=./roles/cisco-hostname/build/ state=directory
-  when:
-    - ansible_check_mode
+---
 
-- name: Generate Cisco Configuration from Template
-  connection: local
-  tags: build
-  template:
-    src: config.j2 
-    dest: ./roles/cisco-hostname/build/{{ inventory_hostname }}.txt
-  when:
-    - ansible_check_mode
+# Start the Virtual Machine fhooelibrenms on Ansible 2.5
+#- name: Start the Virtual Machine fhooelibrenms
+#  tags: vmwareguest-start
+#  delegate_to: localhost
+#  vmware_guest_powerstate:
+#    hostname: "{{ vcenter_hostname }}"
+#    username: "{{ vcenter_user }}"
+#    password: "{{ vcenter_pass }}"
+#    validate_certs: no
+#    folder: /Kunden
+#    name: "{{ inventory_hostname }}"
+#    state: powered-on
+#  when: 
+#    - not ansible_check_mode
+#    - vm_facts.virtual_machines.fhooelibrenms2.power_state == "poweredOff"
+#  register: vmdeploy
 
-- name: Take a Configuration Backup from Device
-  connection: local
-  tags: bak
-  ios_config:
-    host: "{{ ansible_ssh_host }}"
-    username: "{{ ansible_ssh_user }}"
-    password: "{{ ansible_ssh_password }}"
-    backup: yes
+# Find the Virtual Machine
+- name: Find the Virtual Machine on VMware CLuster
+  tags: vmware-find
   ignore_errors: yes
-  when:
-    - ansible_check_mode
+#  connection: local
+  delegate_to: localhost
+  vmware_guest_find:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_user }}"
+    password: "{{ vcenter_pass }}"
+    datacenter: "{{ vm_dc }}"
+    validate_certs: false
+    name: "{{ inventory_hostname }}"
+  register: vmfound
 
-- name: Get current State of the device 
-  tags: bak
-  connection: local
-  ignore_errors: yes
-  ios_facts:
-      host: "{{ ansible_ssh_host }}"
-      username: "{{ ansible_ssh_user }}"
-      password: "{{ ansible_ssh_password }}"
-  register: iosfacts_out
-
-- name: Copy Facts to File
-  connection: local
-  ignore_errors: yes
-  copy: content="{{ iosfacts_out | to_nice_json }}" dest=./state/{{inventory_hostname}}_iosfacts.json
+- name: Print VM Find Debug
+  debug: msg="{{ vmfound }}"
 
 
-# Set Hostname on Device from Template
-- name: Config Switch Hostname
-  tags: oam
-  connection: local
-  ios_config:
-      host: "{{ ansible_ssh_host }}"
-      username: "{{ ansible_ssh_user }}"
-      password: "{{ ansible_ssh_password }}"
-      lines: hostname {{ inventory_hostname }}
-  when:
+# Get Facts of VM
+- name: get facts about a virtual machine from vmware
+  tags: vmwareguest-facts
+  delegate_to: localhost
+  vmware_guest_facts:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_user }}"
+    password: "{{ vcenter_pass }}"
+    datacenter: "{{ vm_dc }}"
+    validate_certs: no
+    folder: '{{ vm_dc }}/{{ vmfound.folders[0] }}'
+    name: "{{ inventory_hostname }}"
+  when: 
+  - vmfound.failed == false
+  register: vm_facts
+
+- name: Print VM Facts Debug
+  debug: msg="{{ vm_facts }}"
+
+
+# Start the Virtual Machine
+- name: Start the Virtual Machine
+  tags: vmwareguest-start
+  delegate_to: localhost
+  vmware_guest:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_user }}"
+    password: "{{ vcenter_pass }}"
+    validate_certs: no
+    datacenter: "{{ vm_dc }}"
+    folder: '{{ vm_dc }}/{{ vmfound.folders[0] }}'
+    name: "{{ inventory_hostname }}"
+    state: poweredon
+    wait_for_ip_address: yes
+  when: 
     - not ansible_check_mode
+    - vmfound.failed == false
+  register: vmdeploy
+
+- name: Print VM Start Debug
+  debug: msg="{{ vmdeploy }}"
 
 
+# Create a VM from Ubuntu 16.04 Template
+- name: Create fhooelibrenms VM from a template with module vmwareguest
+  tags: vmwareguest-clone
+  delegate_to: localhost
+  vmware_guest:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_user }}"
+    password: "{{ vcenter_pass }}"
+    validate_certs: no
+    folder: 'vm/{{ vm_folder }}'
+    cluster: "{{ vm_cluster }}"
+    datacenter: "{{ vm_dc }}"
+    name: "{{ inventory_hostname }}"
+    template: "{{ vm_template }}"
+    networks:
+    - name: "{{ vm_network }}"
+    state: poweredon
+    annotation: "Created by Ansible from Template"  
+  when: 
+    - not ansible_check_mode
+    - vmfound.failed == true
+    - vm_create == true
+  register: vmdeploy
+#    wait_for_ip_address: yes
+#  register: deployvm
+- name: Print VM Create Debug
+  debug: msg="{{ vmdeploy }}"
 
+# Get Facts of VM
+- name: get facts about a virtual machine from vmware
+  tags: vmwareguest-facts
+  delegate_to: localhost
+  vmware_guest_facts:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_user }}"
+    password: "{{ vcenter_pass }}"
+    datacenter: "{{ vm_dc }}"
+    validate_certs: no
+    folder: '{{ vm_dc }}/{{ vmfound.folders[0] }}'
+    name: "{{ inventory_hostname }}"
+  when: 
+  - vmfound.failed == false
+  register: vm_facts
+
+- name: Print VM Facts Debug
+  debug: msg="{{ vm_facts }}"
+  
+# Set Facts from vmware
+- name: Set some Facts from Vcenter with ipv6 error
+  ignore_errors: yes
+  set_fact:
+    delegate_facts: true
+    delegate_to: "{{ inventory_hostname }}"
+    ansible_default_ipv4: "{{ vm_facts.instance.hw_eth0.ipaddresses[0] }}"
+    ansible_host: "{{ vm_facts.instance.hw_eth0.ipaddresses[0] }}"
+  when: 
+    - not ansible_check_mode
+    - vm_facts.instance.ipv4
+    - vm_facts.instance.ipv4.find(":") != -1
+
+- name: Set some Facts from Vcenter with ipv4 Adress
+  ignore_errors: yes
+  set_fact:
+    delegate_facts: true
+    delegate_to: "{{ inventory_hostname }}"
+    ansible_default_ipv4: "{{ vm_facts.instance.ipv4 }}"
+    ansible_host: "{{ vm_facts.instance.ipv4 }}"
+  when: 
+    - not ansible_check_mode
+    - vm_facts.instance.ipv4
+    - vm_facts.instance.ipv4.find(".") != -1
