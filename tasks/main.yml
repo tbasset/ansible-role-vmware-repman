@@ -31,7 +31,7 @@
     validate_certs: false
     name: "{{ inventory_hostname }}"
   register: vmfound
-  always_run: yes
+  check_mode: yes
 
 
 - name: Print VM Find Debug
@@ -53,7 +53,7 @@
   when: 
   - vmfound.failed == false
   register: vm_facts
-  always_run: yes
+  check_mode: yes
 
 - name: Print VM Facts Debug
   debug: msg="{{ vm_facts }}"
