@@ -26,6 +26,21 @@ syntax-check:
   script:
     - 'ansible-playbook -i tests/ansible-docker/hosts tests/test.yml --syntax-check'
 
+build-docker-image:
+  image: docker:stable
+  stage: build
+  script:
+  - docker info
+  - docker build -t ansible /tests/.
+
+#docker push:
+#  stage: Push to Docker Hub
+#  only:
+#  - master
+#  script:
+#  - echo "$REGISTRY_PASSWORD" | docker login -u "$REGISTRY_USER" --password-stdin
+#  - docker push angristan/riot
+
 #build-config:
 #  stage: build
 #  image: ubuntu:latest
