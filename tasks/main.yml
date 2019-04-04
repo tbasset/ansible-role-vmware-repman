@@ -31,7 +31,8 @@
     validate_certs: false
     name: "{{ inventory_hostname }}"
   register: vmfound
-
+  when:
+    - ansible_check_mode
 - name: Print VM Find Debug
   debug: msg="{{ vmfound }}"
 
