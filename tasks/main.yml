@@ -50,10 +50,11 @@
     validate_certs: no
     folder: '{{ vm_dc }}/{{ vmfound.folders[0] }}'
     name: "{{ inventory_hostname }}"
-  when: 
+  when:
+  - not ansible_check_mode
   - vmfound.failed == false
   register: vm_facts
-  check_mode: yes
+#  check_mode: yes
 
 - name: Print VM Facts Debug
   debug: msg="{{ vm_facts }}"
@@ -123,6 +124,7 @@
     folder: '{{ vm_dc }}/{{ vmfound.folders[0] }}'
     name: "{{ inventory_hostname }}"
   when: 
+  - not ansible_check_mode
   - vmfound.failed == false
   register: vm_facts
 
