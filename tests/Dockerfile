@@ -2,7 +2,7 @@ FROM ubuntu:xenial
 MAINTAINER Roland Stumpner <roland.stumpner@fh-ooe.at>
 
 # Copy the TERENA CA to Container:
-COPY DigiCertCA.crt /usr/local/share/ca-certificates/
+#COPY DigiCertCA.crt /usr/local/share/ca-certificates/
 
 RUN apt update && \
     apt install --no-install-recommends -y python-minimal software-properties-common git vim iputils-ping mtr dnsutils rsync tree python-pip && \
@@ -33,7 +33,7 @@ git config --global http.sslVerify false
 # CMD ["ansible-playbook","-i","/opt/ansible-playbooks/fhooe-ansible-networkconfig/fhooe-network-inventory","/opt/ansible-playbooks/fhooe-ansible-networkconfig/fhooe.yml","--limit","wel-network-rz"]
 
 # Copy Ansible Vault File
-COPY vault-password /opt/
+#COPY vault-password /opt/
 
 # Execute the Ansible Playbook:
 CMD ["git","config","--global","http.sslVerify","false"]
