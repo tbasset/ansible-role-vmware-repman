@@ -29,6 +29,10 @@ syntax-check:
 build-docker-image:
   image: docker:stable
   stage: build
+  artifacts:
+    when: always
+    paths:
+      - tests/
   script:
   - docker info
   - docker build -t ansible tests/.
