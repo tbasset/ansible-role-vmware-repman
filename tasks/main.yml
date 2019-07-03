@@ -135,7 +135,6 @@
   tags:
      - debug
      - deploy
-     - integration
   debug: msg="{{ vmdeploy }}"
 
 # Get Facts of VM
