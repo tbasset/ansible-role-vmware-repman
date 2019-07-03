@@ -19,7 +19,11 @@
 
 # Find the Virtual Machine
 - name: Find the Virtual Machine on VMware CLuster
-  tags: vmware-find
+  tags: 
+     - vmware-find
+     - deploy
+     - test
+     - integration
   ignore_errors: yes
 #  connection: local
   delegate_to: localhost
@@ -35,12 +39,20 @@
 
 
 - name: Print VM Find Debug
+  tags:
+     - debug
+     - test
+     - integration
   debug: msg="{{ vmfound }}"
 
 
 # Get Facts of VM
 - name: get facts about a virtual machine from vmware
-  tags: vmwareguest-facts
+  tags: 
+     - vmwareguest-facts
+     - deploy
+     - test
+     - integration
   delegate_to: localhost
   vmware_guest_facts:
     hostname: "{{ vcenter_hostname }}"
@@ -56,12 +68,18 @@
   check_mode: yes
 
 - name: Print VM Facts Debug
+  tags:
+     - debug
+     - test
+     - integration
   debug: msg="{{ vm_facts }}"
 
 
 # Start the Virtual Machine
 - name: Start the Virtual Machine
-  tags: vmwareguest-start
+  tags: 
+     - vmwareguest-start
+     - deploy
   delegate_to: localhost
   vmware_guest:
     hostname: "{{ vcenter_hostname }}"
@@ -79,12 +97,18 @@
   register: vmdeploy
 
 - name: Print VM Start Debug
+  tags:
+     - debug
+     - deploy
+     - integration
   debug: msg="{{ vmdeploy }}"
 
 
 # Create a VM from Ubuntu 16.04 Template
 - name: Create fhooelibrenms VM from a template with module vmwareguest
-  tags: vmwareguest-clone
+  tags: 
+     - vmwareguest-clone
+     - deploy
   delegate_to: localhost
   vmware_guest:
     hostname: "{{ vcenter_hostname }}"
@@ -108,11 +132,19 @@
 #    wait_for_ip_address: yes
 #  register: deployvm
 - name: Print VM Create Debug
+  tags:
+     - debug
+     - deploy
+     - integration
   debug: msg="{{ vmdeploy }}"
 
 # Get Facts of VM
 - name: get facts about a virtual machine from vmware
-  tags: vmwareguest-facts
+  tags: 
+     - vmwareguest-facts
+     - debug
+     - test
+     - integration
   delegate_to: localhost
   vmware_guest_facts:
     hostname: "{{ vcenter_hostname }}"
@@ -127,10 +159,16 @@
   register: vm_facts
 
 - name: Print VM Facts Debug
+  tags:
+     - debug
+     - test
+     - integration
   debug: msg="{{ vm_facts }}"
   
 # Set Facts from vmware
 - name: Set some Facts from Vcenter with ipv6 error
+  tags:
+     - deploy
   ignore_errors: yes
   set_fact:
     delegate_facts: true
@@ -143,6 +181,8 @@
     - vm_facts.instance.ipv4.find(":") != -1
 
 - name: Set some Facts from Vcenter with ipv4 Adress
+  tags:
+     - deploy
   ignore_errors: yes
   set_fact:
     delegate_facts: true
