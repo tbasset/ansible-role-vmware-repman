@@ -100,7 +100,6 @@
   tags:
      - debug
      - deploy
-     - integration
   debug: msg="{{ vmdeploy }}"
 
 
@@ -140,7 +139,7 @@
   debug: msg="{{ vmdeploy }}"
 
 # Get Facts of VM
-- name: Get Facts from Vmware vSpher for Virtual Machine
+- name: Get Facts from Vmware vSphere for Virtual Machine
   tags: 
      - vmwareguest-facts
      - debug
