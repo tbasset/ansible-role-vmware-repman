@@ -28,6 +28,8 @@ syntax-check:
 
 build-docker-image:
   image: docker:stable
+  services:
+  - docker:19.03.1-dind
   stage: build
   artifacts:
     when: always
