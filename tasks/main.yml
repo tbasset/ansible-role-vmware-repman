@@ -1,4 +1,21 @@
 ---
+- name: Create Build Directory
+  connection: local
+  tags: 
+    - build
+    - cli
+    - build-cli
+  file: path=./build/{{ role_name|basename }}/ state=directory
+
+- name: Bild Cisco Configuration CLI from Template
+  connection: local
+  tags: 
+    - build
+    - cli
+    - build-cli
+  template:
+    src: config.j2 
+    dest: ./build/{{ role_name|basename }}/{{ inventory_hostname }}-{{ role_name|basename }}.ps1
 
 # Start the Virtual Machine fhooelibrenms on Ansible 2.5
 #- name: Start the Virtual Machine fhooelibrenms
