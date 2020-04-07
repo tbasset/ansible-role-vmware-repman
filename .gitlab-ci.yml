@@ -115,6 +115,7 @@ build-docker-image:
 deploy:
   stage: deploy
   image: ubuntu:latest
+  when: manual
   artifacts:
     when: always
     paths:
