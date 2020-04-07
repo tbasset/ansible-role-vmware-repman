@@ -52,6 +52,7 @@ build-config:
   artifacts:
     when: always
     paths:
+      - "*/build/*"
       - config/
       - build/
       - state/
