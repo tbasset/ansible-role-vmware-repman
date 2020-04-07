@@ -1,5 +1,14 @@
-# Cisco IOS Config
-# Generated {{ ansible_date_time.date }}
-# Config for {{ inventory_hostname }}
+# PowerCli Script
+# Install PowerCLI
+# Connect to Vcenter
+Connect-VIServer -Server {{ vcenter_hostname }}
 
-hostname {{ inventory_hostname|lower }}
+# Create New VM
+New-VM -Name '{{ inventory_hostname }}' -ResourcePool '{{ vm_cluster }}' -Datastore '{{ vm_datastore }}' -DiskGB {{ vm_disksize }} -MemoryGB {{ vm_memory }} -NumCpu {{ vm_cpu }} -NetworkName '{{ vm_network }}'
+
+# Deploy VM from Template
+$VMTemplate = Get-Template -Name 'Server2012R2Template'
+
+Finally, I deploy my VM with the New-VM cmdlet using my template and OS specs. I place the VM on the "VMHost-1" ESXi host and store the VM on the "TestDatastore" datastore.
+
+New-VM -Name 'TestVM' -Template $VMTemplate -OSCustomizationSpec $OSSpec -VMHost 'VMHost-1' -Datastore 'TestDatastore
