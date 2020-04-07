@@ -37,9 +37,9 @@ build-docker-image:
       - tests/
   script:
   - docker info
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  - docker build -t ansible tests/.
-  - docker push $CI_REGISTRY/group/project/image:latest
+#  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#  - docker build -t ansible tests/.
+#  - docker push $CI_REGISTRY/group/project/image:latest
 
 #docker push:
 #  stage: Push to Docker Hub
