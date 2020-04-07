@@ -66,7 +66,7 @@ build-config:
     - pip install pyvmomi
     - ansible --version
   script:
-    - 'ansible-playbook -i tests/ansible-docker/hosts tests/test.yml --check --tags build'
+    - 'ansible-playbook -i tests/ansible-docker/hosts tests/test.yml --tags build'
 
 testing:
   stage: testing
