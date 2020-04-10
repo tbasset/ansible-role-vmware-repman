@@ -17,5 +17,5 @@ vm_cpu: 1
 vm_template: "template-vm10-ws2016-std-en"
 vm_create: true
 # Compatibility
-vm_folder: {{ vm_location }}
+vm_folder: "{{ vm_location }}"
 
