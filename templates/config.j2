@@ -13,6 +13,7 @@ Connect-VIServer -Server {{ vcenter_hostname }}
 
 # Get Environment States
 $vm_cluster = Get-Cluster -Name {{ vm_cluster }}
+$vm_location =  Get-Folder {{ vm_location }}
 $vm_datastore = Get-DatastoreCluster -name {{ vm_datastore }}
 $vm_network = Get-VDPortgroup -Name {{ vm_network }}
 $vm_exist = get-vm -name {{ inventory_hostname }} -ErrorAction SilentlyContinue
@@ -28,7 +29,7 @@ If  ($vm_exist) {
         if ($template_exists){
 #            New-VM -Name '{{ inventory_hostname }}' -Template $VMTemplate -OSCustomizationSpec $OSSpec -VMHost 'VMHost-1' -Datastore 'TestDatastore
         Else {
-            New-VM -Name '{{ inventory_hostname }}' -ResourcePool $vm_cluster -Datastore $vm_datastore -DiskGB {{ vm_disksize }} -MemoryGB {{ vm_memory }} -NumCpu {{ vm_cpu }} -NetworkName $vm_network
+            New-VM -Name '{{ inventory_hostname }}' -ResourcePool $vm_cluster -location $vm_location -Datastore $vm_datastore -DiskGB {{ vm_disksize }} -MemoryGB {{ vm_memory }} -NumCpu {{ vm_cpu }} -NetworkName $vm_network
         }
     } 
 }
