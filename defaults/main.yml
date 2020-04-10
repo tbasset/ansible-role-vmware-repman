@@ -8,12 +8,14 @@ vcenter_user: "admin"
 vcenter_pass: "admin"
 vm_cluster: "vcentercluster1"
 vm_dc: "vcenterdc"
-vm_folder: "vcenter/testing"
 vm_datastore: 'datastore'
 vm_network: VMNetwork
+vm_location: "vcenter/testing" 
 vm_disksize: 10
 vm_memory: 4
 vm_cpu: 1
 vm_template: "template-vm10-ws2016-std-en"
 vm_create: true
+# Compatibility
+vm_folder: {{ vm_location }}
 
