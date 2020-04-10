@@ -1,14 +1,37 @@
 # PowerCli Script
 # Install PowerCLI
+Install-Module -name vmware.powercli -Confirm:$false
+
+# Import PowerCLI Module
+Import-Module VMware.VimAutomation.Core
+
+# Disable SSL Cert Check
+Set-PowerCLIConfiguration -InvalidCertificateAction Ignore -Confirm:$false
+
 # Connect to Vcenter
 Connect-VIServer -Server {{ vcenter_hostname }}
 
+# Get Environment States
+$vm_cluster = Get-Cluster -Name {{ vm_cluster }}
+$vm_datastore = Get-DatastoreCluster -name {{ vm_datastore }}
+$vm_network = Get-VDPortgroup -Name {{ vm_network }}
+$vm_exist = get-vm -name {{ inventory_hostname }} -ErrorAction SilentlyContinue
+$template_exists = Get-Template -Name {{ vm_template }}
+
+
 # Create New VM
-New-VM -Name '{{ inventory_hostname }}' -ResourcePool '{{ vm_cluster }}' -Datastore '{{ vm_datastore }}' -DiskGB {{ vm_disksize }} -MemoryGB {{ vm_memory }} -NumCpu {{ vm_cpu }} -NetworkName '{{ vm_network }}'
+If  ($vm_exist) {  
+        Write-Host "VM name exsists on vcenter - no VM deployment..." -foregroundcolor "red"
+        break
+    }  
+    Else {  
+        if ($template_exists){
+#            New-VM -Name '{{ inventory_hostname }}' -Template $VMTemplate -OSCustomizationSpec $OSSpec -VMHost 'VMHost-1' -Datastore 'TestDatastore
+        Else {
+            New-VM -Name '{{ inventory_hostname }}' -ResourcePool $vm_cluster -Datastore $vm_datastore -DiskGB {{ vm_disksize }} -MemoryGB {{ vm_memory }} -NumCpu {{ vm_cpu }} -NetworkName $vm_network
+        }
+    } 
+}
 
-# Deploy VM from Template
-$VMTemplate = Get-Template -Name 'Server2012R2Template'
 
-Finally, I deploy my VM with the New-VM cmdlet using my template and OS specs. I place the VM on the "VMHost-1" ESXi host and store the VM on the "TestDatastore" datastore.
 
-New-VM -Name 'TestVM' -Template $VMTemplate -OSCustomizationSpec $OSSpec -VMHost 'VMHost-1' -Datastore 'TestDatastore
