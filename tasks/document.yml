@@ -1,0 +1,20 @@
+# All Tasks to document the Application
+# tenants
+# services
+# user access
+# tags: 
+#   - doc
+
+- name: create a directory for live documentation
+  delegate_to: localhost
+  tags: 
+    - doc
+    - build
+  file: path=./doc/{{ role_name|basename }}/ state=directory
+
+
+- name: document application
+  tags: 
+    - doc
+  debug:
+    msg: "This is a debug output insert tasks to build a live documentation of the application"

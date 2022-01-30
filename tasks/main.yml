@@ -1,4 +1,7 @@
 ---
+- import_tasks: 
+    file: document.yml
+
 - name: Create Build Directory
   delegate_to: localhost
   tags: 
