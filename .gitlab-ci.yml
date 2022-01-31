@@ -6,6 +6,10 @@ include:
 # remote cicd template
 #   remote: 'https://gitlab.com/rstumpner/ansible-role-template/raw/master/.gitlab-ci.yml'
 
+
+
+
+## Try testing with molecule and docker (actual big mess with ansible molecule docker collections and all)
 testing-with-molecule:
   stage: prepare
   artifacts:

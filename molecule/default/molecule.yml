@@ -2,7 +2,11 @@
 dependency:
   name: galaxy
 driver:
-  name: docker
+  name: delegated
+  options:
+    managed: False
+    ansible_connection_options:
+      ansible_connection: local
 platforms:
   - name: ubuntu1804
     image: ubuntu:18.04
