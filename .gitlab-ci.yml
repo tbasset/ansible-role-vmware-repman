@@ -5,3 +5,22 @@ include:
     file: '/.gitlab-ci.yml'
 # remote cicd template
 #   remote: 'https://gitlab.com/rstumpner/ansible-role-template/raw/master/.gitlab-ci.yml'
+
+
+# Reference Install python bindings for vmware collection
+.deploy_python_vmware_install:
+  before_script:
+    - pip3 install pyvmomi
+
+testing-with-molecule:
+  stage: prepare
+  artifacts:
+    when: always
+    paths:
+      - tests/
+  before_script: !reference [.test_static_pytest_install,.deploy_python_vmware_install,before_script]
+  script:
+#    - docker info
+    - 'molecule list'
+    - 'molecule check'
+    - 'molecule test'
