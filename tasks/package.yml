@@ -1,0 +1,12 @@
+---
+# All Tasks to package the Application
+# zip
+# container
+# vm
+# upload to repo
+
+- name: package application
+  tags: 
+    - package
+  debug:
+    msg: "This is a debug output insert tasks to package the application"

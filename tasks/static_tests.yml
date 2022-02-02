@@ -1,0 +1,10 @@
+---
+# All Tasks to statical test configurations for the Application
+# Testframworks pytest
+# Policy Testing pytest / openpolicyagent
+
+- name: static tests
+  tags: 
+    - static_test
+  debug:
+    msg: "This is a debug output insert a static test or trigger a framework like pytest"

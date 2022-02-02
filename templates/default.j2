@@ -1,0 +1,12 @@
+# Configs build {{ role_name|basename }}
+{% if ansible_date_time.date is defined %}
+# Generated {{ ansible_date_time.date }}
+{% endif %}
+# Config for {{ inventory_hostname|lower }}
+# Managed by Ansible
+
+## Vmware Powercli
+```
+{% include 'power-cli.j2' %}
+
+```

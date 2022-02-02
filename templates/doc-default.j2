@@ -1,0 +1,11 @@
+# Documentaion build {{ role_name|basename }}
+{% if ansible_date_time.date is defined %}
+# Generated {{ ansible_date_time.date }}
+{% endif %}
+# Documentaion for {{ inventory_hostname|lower }}
+# Managed by Ansible
+
+
+
+{% include 'doc-markdown.j2' %}
+{% include 'doc-csv.j2' %}

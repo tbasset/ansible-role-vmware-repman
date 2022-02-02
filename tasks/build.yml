@@ -1,0 +1,30 @@
+---
+# All Tasks to Build Configurations for the Application
+# Config Files for CLI Copy Paste
+# certificates
+# tags: 
+#   - build
+
+- name: Create a directory for builds
+  delegate_to: localhost
+  tags: 
+    - build
+  file: path=./build/{{ role_name|basename }}/ state=directory
+
+- name: Build configuration files from default template
+  delegate_to: localhost
+  tags: 
+    - build
+  template:
+    src: default.j2 
+    dest: ./build/{{ role_name|basename }}/{{ inventory_hostname }}-{{ role_name|basename }}.conf
+
+- name: Bild PowerCLI files from Template
+  delegate_to: localhost
+  tags: 
+    - build
+  template:
+    src: power-cli.j2 
+    dest: ./build/{{ role_name|basename }}/{{ inventory_hostname }}-{{ role_name|basename }}.ps1
+
+

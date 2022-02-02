@@ -1,0 +1,70 @@
+---
+# All Tasks to prepare the deployment of the Application
+# snapshot
+# backup
+# states
+# infra startup
+# infra creation
+# Ensure a Backup of the ACI Fabric is created
+
+
+## copy from main
+# Find the Virtual Machine
+- name: Find the Virtual Machine on VMware CLuster
+  tags: 
+     - vmware-find
+     - deploy
+     - test
+     - integration
+     - prepare
+  ignore_errors: yes
+  delegate_to: localhost
+  vmware_guest_find:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_user }}"
+    password: "{{ vcenter_pass }}"
+    datacenter: "{{ vm_dc }}"
+    validate_certs: false
+    name: "{{ inventory_hostname }}"
+  register: vmfound
+  check_mode: no
+
+
+- name: Print Debug VM Search
+  tags:
+     - debug
+     - test
+     - integration
+     - prepare
+  debug: msg="{{ vmfound }}"
+
+
+# Get Facts of VM
+- name: Get Facts from VMware vSphere for Virtual Machine
+  tags: 
+     - vmwareguest-facts
+     - deploy
+     - test
+     - integration
+     - prepare
+  delegate_to: localhost
+  vmware_guest_facts:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_user }}"
+    password: "{{ vcenter_pass }}"
+    datacenter: "{{ vm_dc }}"
+    validate_certs: no
+    folder: '{{ vm_dc }}/{{ vmfound.folders[0] }}'
+    name: "{{ inventory_hostname }}"
+  when: 
+  - vmfound.failed == false
+  register: vm_facts
+  check_mode: yes
+
+- name: Print Debug VM Facts
+  tags:
+     - debug
+     - test
+     - integration
+     - prepare
+  debug: msg="{{ vm_facts }}"

@@ -1,12 +1,13 @@
-# Ansible Role VMware vSphere Operations
-This is a Ansible Role for Operating a VM of a Service.
+# Ansible Role VMware Replication Manager for vSphere
+This is a Ansible Role for Managing and Operating a VM with a defined lifecycle for a Service.
 
-Aufbau:
+Stages:
 - Build
-- Test
+- prepare
     - snap
     - testing changes (--diff)
-
+- deploy 
+  
 Requirements:
     None
 
@@ -14,21 +15,20 @@ Role Variables:
     - hostname
 
 Using this Role:
-Drive to Ansible Role Directory:
-    - git clone https://fhzengitlab1.fhooe.at/P50010/cisco-hostname.git
+  - git clone https://gitlab.com/rstumpner/ansible-role-vmware-repman
 
-Aktivate Role in a Playbook:
+Activate role in a playbook or deployment:
 
 Example:
 ```YAML
 - hosts: all
   roles:
-     - cisco-hostname
+     - ansible-role-vmware-repman
 ```
 
 Tested:
- - Cisco IOS
- - Cisco IOS-XE
+ - vSphere 7
+
  
 License:
     MIT / BSD
