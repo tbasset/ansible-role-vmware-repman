@@ -9,7 +9,7 @@ include:
 
 
 
-## Try testing with molecule and docker (actual big mess with ansible molecule docker collections and all)
+## disable testing with molecule and docker (actual big mess with ansible molecule docker collections and all)
 testing-with-molecule:
   stage: prepare
   artifacts:
@@ -36,5 +36,3 @@ testing-with-molecule:
   script:
 #    - docker info
     - 'molecule list'
-    - 'molecule check'
-    - 'molecule test'
