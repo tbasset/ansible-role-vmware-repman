@@ -8,5 +8,6 @@
 
 ## VM Table
 
-| VM Name | CPU | Memory | Network (vnet) | template 
-| --- | --- | --- | --- | --- | --- |
+| VM Name | CPU | Memory | Disk Size | Storage | Network (vnet) | template |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|{{ inventory_hostname |lower }}|{{ vm_cpu }}|{{ vm_memory }}|{{ vm_disksize }} | {{ vm_datastore }} | {{ vm_network }}|{{ vm_template }} |
