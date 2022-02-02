@@ -1,0 +1,11 @@
+---
+# All Tasks to verify the deploy of the Application
+# states
+# performance
+
+- name: verify application changes
+  tags: 
+    - verify
+    - dynamic_test
+  debug:
+    msg: "This is a debug output insert tasks to verify the deploy of the application"
