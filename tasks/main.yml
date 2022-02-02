@@ -1,41 +1,9 @@
 ---
 - import_tasks: 
+    file: build.yml
+- import_tasks: 
     file: document.yml
 
-- name: Create Build Directory
-  delegate_to: localhost
-  tags: 
-    - build
-    - cli
-    - build-cli
-  file: path=./build/{{ role_name|basename }}/ state=directory
-
-- name: Bild PowerCLI from Template
-  delegate_to: localhost
-  tags: 
-    - build
-    - cli
-    - build-cli
-  template:
-    src: config.j2 
-    dest: ./build/{{ role_name|basename }}/{{ inventory_hostname }}-{{ role_name|basename }}.ps1
-
-# Start the Virtual Machine fhooelibrenms on Ansible 2.5
-#- name: Start the Virtual Machine fhooelibrenms
-#  tags: vmwareguest-start
-#  delegate_to: localhost
-#  vmware_guest_powerstate:
-#    hostname: "{{ vcenter_hostname }}"
-#    username: "{{ vcenter_user }}"
-#    password: "{{ vcenter_pass }}"
-#    validate_certs: no
-#    folder: /Kunden
-#    name: "{{ inventory_hostname }}"
-#    state: powered-on
-#  when: 
-#    - not ansible_check_mode
-#    - vm_facts.virtual_machines.fhooelibrenms2.power_state == "poweredOff"
-#  register: vmdeploy
 
 # Find the Virtual Machine
 - name: Find the Virtual Machine on VMware CLuster
