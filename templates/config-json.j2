@@ -1,0 +1,29 @@
+{
+    "VMName": "{{ inventory_hostname }}",
+    "ADDescription": "{{ inventory_hostname |lower }} Managed by vmware-repman",
+    "ADOU": "ou=sitecomputers,dc=domain,dc=tld",
+    "VMNetwork": "{{ vm_network |default("vnet_test") }}",
+    "Datacenter": "{{ vm_dc | default("dc_test") }}",
+    "ResourcePool": "{{ vm_cluster | default("cluster_test") }}",
+    "Datastore": "{{ vm_datastore | default("store_test") }}",
+    "Folder": "{{ vm_location | default("folder_test") }}",
+    "Template": "{{ vm_template | default("false") }}",
+    "BackupTag": "{{ vm_repma_tags | default("repman") }}",
+    "Domain": "{{ inventory_hostname }}",
+    "IPv4": {
+      "Address": "10.1.1.11",
+      "Gateway": "10.1.1.1",
+      "Mask": "24",
+      "DNS1": "10.1.2.11",
+      "DNS2": "10.1.2.12",
+      "DNS3": "10.1.2.11"
+    },
+    "IPv6": {
+      "Address": "FE80:1:1:1::10",
+      "Gateway": "FE80:1:1:1::1",
+      "Mask": "64",
+      "DNS1": "FE80:1:1:2::1",
+      "DNS2": "FE80:1:1:2::1",
+      "DNS3": "FE80:1:1:2::1"
+    }
+}
