@@ -3,6 +3,7 @@
 # inventory_hostname: localhost
 
 ansible_python_interpreter: /usr/bin/python3
+vm_repman_output_dir: docs
 vcenter_hostname: vcenter.example.at
 vcenter_user: "admin"
 vcenter_pass: "admin"
