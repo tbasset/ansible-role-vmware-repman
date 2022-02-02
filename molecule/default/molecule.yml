@@ -1,0 +1,32 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: delegated
+  options:
+    managed: False
+    ansible_connection_options:
+      ansible_connection: local
+platforms:
+  - name: ubuntu1804
+    image: ubuntu:18.04
+    privileged: true
+    pre_build_image: true
+#    command: apt update && apt install -y python3 && bash -c 'while true; do sleep 10000; done'
+    callback_whitelist: profile_tasks, timer, yaml
+#    ansible_python_interpreter: /usr/bin/python3
+  - name: ubuntu2004
+    image: ubuntu:20.04
+    privileged: true
+    pre_build_image: true
+#    command: apt update && apt install -y python3
+    callback_whitelist: profile_tasks, timer, yaml
+#    ansible_python_interpreter: /usr/bin/python3
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
+#lint: |
+#  set -e
+#  yamllint .
+#  ansible-lint

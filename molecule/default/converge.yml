@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+#  gather_facts: false
+#  become: true
+  tasks:
+    - name: "Include ansible-role-vmware-repman"
+      include_role:
+        name: "ansible-role-vmware-repman"

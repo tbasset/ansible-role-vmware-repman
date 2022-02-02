@@ -1,0 +1,9 @@
+{
+    "example": {
+        "title": "example json file",
+		"examplestruct": {
+            "title": "examplestruct",
+            "name": "myname"
+        }
+    }
+}
