@@ -24,7 +24,7 @@
   tags: 
     - build
   template:
-    src: powercli.j2 
+    src: power-cli.j2 
     dest: ./build/{{ role_name|basename }}/{{ inventory_hostname }}-{{ role_name|basename }}.ps1
 
 
