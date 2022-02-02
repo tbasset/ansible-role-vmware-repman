@@ -1,3 +1,4 @@
+---
 # All Tasks to document the Application
 # tenants
 # services
@@ -13,8 +14,29 @@
   file: path=./doc/{{ role_name|basename }}/ state=directory
 
 
-- name: document application
+- name: Generate documentation for the services
+  delegate_to: localhost
   tags: 
     - doc
-  debug:
-    msg: "This is a debug output insert tasks to build a live documentation of the application"
+    - build
+  template:
+    src: doc-default.j2 
+    dest: ./doc/{{ role_name|basename }}/{{ inventory_hostname }}-{{ role_name|basename }}-all.md
+
+- name: Generate markdown documentation for the services
+  delegate_to: localhost
+  tags: 
+    - doc
+    - build
+  template:
+    src: doc-markdown.j2 
+    dest: ./doc/{{ role_name|basename }}/{{ inventory_hostname }}-{{ role_name|basename }}.md
+
+- name: Generate csv documentation for the services
+  delegate_to: localhost
+  tags: 
+    - doc
+    - build
+  template:
+    src: doc-csv.j2 
+    dest: ./doc/{{ role_name|basename }}/{{ inventory_hostname }}-{{ role_name|basename }}.csv
